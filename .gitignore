@@ -8,6 +8,8 @@ android/local.properties
 android/app/release/
 *.keystore
 *.jks
+# Excepción: el keystore DEBUG no es secreto y lo necesita el CI para firma estable
+!monetary-debug.keystore
 .DS_Store
 *.log
 npm-debug.log*

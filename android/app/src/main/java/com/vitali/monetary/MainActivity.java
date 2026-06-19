@@ -4,11 +4,13 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.webkit.PermissionRequest;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.getcapacitor.BridgeActivity;
+import com.getcapacitor.BridgeWebChromeClient;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +22,26 @@ public class MainActivity extends BridgeActivity {
     registerPlugin(NotificationListenerPlugin.class);
     super.onCreate(savedInstanceState);
     requestStartupPermissions();
+    grantWebViewMediaPermissions();
+  }
+
+  /**
+   * Clave para el micrófono: el WebView debe CONCEDER getUserMedia (mic/cámara).
+   * Por defecto el bridge puede no otorgarlo → el sitio ve "permiso web denegado"
+   * aunque Android ya tenga el permiso. Acá lo concedemos siempre (ya pedimos el
+   * permiso de Android en requestStartupPermissions).
+   */
+  private void grantWebViewMediaPermissions() {
+    try {
+      this.bridge.getWebView().setWebChromeClient(new BridgeWebChromeClient(this.bridge) {
+        @Override
+        public void onPermissionRequest(final PermissionRequest request) {
+          runOnUiThread(() -> {
+            try { request.grant(request.getResources()); } catch (Exception ignored) {}
+          });
+        }
+      });
+    } catch (Exception ignored) {}
   }
 
   /** Pide al inicio todos los permisos para recolectar datos de transacciones. */
