@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Monetary Agent</string>
+    <string name="title_activity_main">Monetary Agent</string>
+    <string name="package_name">com.vitali.monetary</string>
+    <string name="custom_url_scheme">com.vitali.monetary</string>
+</resources>

@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Monetary Agent</title>
+    <style>
+      :root { color-scheme: dark; }
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      body {
+        height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center;
+        background: radial-gradient(120% 80% at 50% 0%, #14203f 0%, #070a12 60%);
+        color: #e6ecff; font-family: system-ui, -apple-system, sans-serif; text-align: center; padding: 24px;
+      }
+      .logo {
+        width: 84px; height: 84px; border-radius: 50%;
+        background: linear-gradient(135deg, #3b82f6, #2563eb);
+        display: flex; align-items: center; justify-content: center;
+        font-size: 44px; font-weight: 800; color: #fff; box-shadow: 0 12px 40px rgba(37,99,235,.45);
+        animation: pulse 1.8s ease-in-out infinite;
+      }
+      @keyframes pulse { 0%,100% { transform: scale(1); opacity: 1 } 50% { transform: scale(1.06); opacity: .85 } }
+      h1 { margin-top: 22px; font-size: 19px; font-weight: 700; }
+      p { margin-top: 8px; font-size: 13px; color: #8b97b8; max-width: 280px; }
+      button {
+        margin-top: 22px; padding: 13px 26px; border: 0; border-radius: 14px;
+        background: linear-gradient(90deg, #3b82f6, #2563eb); color: #fff; font-size: 14px; font-weight: 600;
+        box-shadow: 0 8px 24px rgba(37,99,235,.4);
+      }
+      .dots { margin-top: 16px; font-size: 12px; color: #64708f; height: 16px; }
+    </style>
+  </head>
+  <body>
+    <div class="logo">M</div>
+    <h1>Reconectando…</h1>
+    <p>Estamos reintentando cargar Monetary. Verificá tu conexión; reintentamos solos.</p>
+    <div class="dots" id="dots"></div>
+    <button onclick="go()">Reintentar ahora</button>
+    <script>
+      var URL = "https://monetary-agent.vercel.app";
+      var n = 0;
+      function go() { location.replace(URL); }
+      // Auto-retry con backoff suave (3s, 3s, 5s, 8s…)
+      function schedule() {
+        n++;
+        var delay = n < 3 ? 3000 : (n < 6 ? 5000 : 8000);
+        document.getElementById("dots").textContent = "Reintento " + n + "…";
+        setTimeout(go, delay);
+      }
+      schedule();
+    </script>
+  </body>
+</html>
